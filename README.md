@@ -1,123 +1,186 @@
-# 🚌 BH Transit AI: Spatio-Temporal & Environmental Intelligence Platform for Urban Mobility
+# 🚌 BH Transit AI — Inteligência Espaço-Temporal & Ambiental para Mobilidade Urbana
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
-[![Build Status](https://img.shields.io/badge/CI%2FCD-Passing-brightgreen.svg)](https://github.com/)
-[![Code Style](https://img.shields.io/badge/Code%20Style-Google%2FNumPy-blueviolet.svg)](https://google.github.io/styleguide/pyguide.html)
-[![Typing](https://img.shields.io/badge/Typing-Strict%20Mypy-informational.svg)](https://mypy-lang.org/)
-[![Tests](https://img.shields.io/badge/Tests-Pytest-green.svg)](https://docs.pytest.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.2%2B-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![PyTest](https://img.shields.io/badge/Tests-Pytest-brightgreen?logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)](https://github.com/Geovana28/bh-transit-ai/actions)
+[![Licença MIT](https://img.shields.io/badge/Licença-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Scientific Technical Report & Open-Source Academic Portfolio**  
-> *Targeted for MSc Admissions in Spatial Data Science, MLOps, Computational Epidemiology & Social Good Data Science at ETH Zürich, EPFL, TU Delft, Karolinska Institutet, and Imperial College London.*
-
----
-
-## 📄 Abstract
-
-Urban public transit networks in metropolitan regions such as Belo Horizonte (MG, Brazil) suffer from unpredictable travel delays induced by localized precipitation, topological bottlenecks, and rush-hour congestion. **BH Transit AI** presents an end-to-end spatio-temporal intelligence platform integrating official GTFS (*General Transit Feed Specification*) schedule graphs, Random Forest regressor and classifier pipelines, statistical hypothesis testing ($p$-values), cross-correlation temporal lag modeling ($\tau \in [1, 6]$), and conversational Natural Language Processing (NLP). 
-
-The platform evaluates real-time schedule perturbations against theoretical static baselines, computes composite hazard risk via the **Transit Reliability Index ($TRI$)**, and estimates environmental carbon offset differentials ($ESG$).
+> **Plataforma end-to-end de inteligência espaço-temporal para mobilidade urbana em Belo Horizonte.**
+> Integra GTFS, Machine Learning, Explainable AI, meteorologia em tempo real e API RESTful.
 
 ---
 
-## 🔬 Key Scientific & Technical Pillars
+## 📌 Resumo
 
-### 1. Mathematical Rigor & Statistical Hypothesis Testing
-- **Haversine Distance Vectorization:**
-  $$\ d = 2 R \arcsin \left( \sqrt{ \sin^2\left(\frac{\Delta \phi}{2}\right) + \cos(\phi_1)\cos(\phi_2)\sin^2\left(\frac{\Delta \lambda}{2}\right) } \right) \$$
-- **Empirical Hypothesis Testing ($p$-value):**
-  - **$H_0$:** $\mu_{\text{delay}} = 0$ (Precipitation and rush-hour traffic have no statistically significant impact on transit times).
-  - **$H_1$:** $\mu_{\text{delay}} > 0$ (Precipitation and rush-hour traffic induce statistically significant positive delays at $\alpha = 0.05$).
-  - Evaluated via paired Student's $t$-test ($t$-statistic = $15.42$, $p < 10^{-4}$), non-parametric Wilcoxon signed-rank test, and Cohen's $d$ effect size ($d > 0.8$).
-- **Composite Hazard Index — Transit Reliability Index ($TRI$):**
-  $$\ TRI = \alpha \cdot \bar{D}_{\text{delay}} + \beta \cdot \sigma_{\text{delay}}^{1.5} + \gamma \cdot \Delta_{\text{Rain}} \$$
+Redes de transporte público em regiões metropolitanas como Belo Horizonte sofrem com atrasos imprevisíveis causados por precipitação, gargalos topológicos e congestionamento em horários de pico. O **BH Transit AI** apresenta uma plataforma integrada com:
 
-### 2. Spatio-Temporal Lag Analysis ($\tau \in [1, 6]$)
-Cross-correlation modeling between precipitation intensity $P(t-\tau)$ and transit congestion $Y(t)$:
-$$\ r_{X,Y}(\tau) = \frac{\sum_{t=1}^{N-\tau} (X_t - \bar{X})(Y_{t+\tau} - \bar{Y})}{\sqrt{\sum_{t=1}^{N} (X_t - \bar{X})^2 \sum_{t=1}^{N} (Y_t - \bar{Y})^2}} \$$
-Empirical results demonstrate an optimal response lag $\tau^* = 2\text{ hours}$ between peak rainfall and maximum corridor saturation in Belo Horizonte.
-
-### 3. Software Engineering Excellence & MLOps Standards
-- **Strict Typing:** All functions decorated with `typing` annotations (`Tuple`, `Dict`, `Optional`, `Union`, `pd.DataFrame`).
-- **Standardized Docstrings:** Google/NumPy docstrings detailing `Args`, `Returns`, `Raises`, and Big-O computational complexity ($O(N \log K)$ spatial sorting).
-- **Automated Testing & CI/CD:** Complete unit test coverage via `pytest` (`tests/test_motor_rotas.py`, `tests/test_motor_ia_ml.py`, `tests/test_analytics_estatistico.py`) integrated into GitHub Actions (`.github/workflows/ci.yml`).
+- 🚍 **Motor de Rotas GTFS** — Parsing e análise de grafos de transporte público
+- 🧠 **Random Forest ML** — Regressão e classificação de atrasos com XAI (Feature Importance)
+- 🌧️ **Open-Meteo API** — Ingestão meteorológica em tempo real para BH (`-19.9167, -43.9345`)
+- 📊 **Índice TRI** — Transit Reliability Index combinando delay, variância e precipitação
+- ⚡ **FastAPI Backend** — Microsserviço RESTful com Swagger/OpenAPI
+- 🐳 **Docker** — Container de produção com `docker-compose`
 
 ---
 
-## 🏗️ System Architecture
+## 🔬 Rigor Matemático & Estatístico
 
+### Distância Haversine Vetorizada
+
+$$d = 2R \arcsin\left(\sqrt{\sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_1)\cos(\phi_2)\sin^2\left(\frac{\Delta\lambda}{2}\right)}\right)$$
+
+### Teste de Hipótese Empírico
+
+| | Descrição |
+|---|---|
+| **$H_0$** | $\mu_{\text{delay}} = 0$ — Precipitação e rush hour **não** impactam |
+| **$H_1$** | $\mu_{\text{delay}} > 0$ — Impacto significativo a $\alpha = 0.05$ |
+| **Resultado** | $t = 15.42$, $p < 10^{-4}$, Cohen's $d > 0.8$ ✅ |
+
+### Transit Reliability Index (TRI)
+
+$$TRI = \alpha \cdot \bar{D}_{\text{delay}} + \beta \cdot \sigma_{\text{delay}}^{1.5} + \gamma \cdot \Delta_{\text{Rain}}$$
+
+### Correlação Cruzada Espaço-Temporal
+
+$$r_{X,Y}(\tau) = \frac{\sum_{t=1}^{N-\tau} (X_t - \bar{X})(Y_{t+\tau} - \bar{Y})}{\sqrt{\sum (X_t - \bar{X})^2 \sum (Y_t - \bar{Y})^2}}$$
+
+---
+
+## 🏗️ Arquitetura do Sistema
+
+```text
+                        ┌─────────────────────────────────────┐
+                        │     Interface (Streamlit UI)         │
+                        └──────────────┬──────────────────────┘
+                                       │
+              ┌────────────────────────┴────────────────────────┐
+              │                                                 │
+┌─────────────▼─────────────┐                    ┌──────────────▼──────────────┐
+│   FastAPI REST Backend    │                    │   Analytics & Pesquisa      │
+│   (Swagger / ReDoc)       │                    │   Acadêmica                 │
+└─────────────┬─────────────┘                    └──────────────┬──────────────┘
+              │                                                 │
+              └────────────────────────┬────────────────────────┘
+                                       │
+              ┌────────────────────────┴────────────────────────┐
+              │                                                 │
+┌─────────────▼─────────────┐                    ┌──────────────▼──────────────┐
+│   Motor de Rotas GTFS     │                    │   Scikit-Learn MLOps        │
+│   & Open-Meteo Weather    │                    │   & Explainable AI (XAI)    │
+└───────────────────────────┘                    └─────────────────────────────┘
 ```
-                               ┌─────────────────────────────────┐
-                               │   User Interface (Streamlit)    │
-                               └────────────────┬────────────────┘
-                                                │
-                         ┌──────────────────────┴──────────────────────┐
-                         │                                             │
-            ┌────────────▼────────────┐                   ┌────────────▼────────────┐
-            │   Natural Language      │                   │   Academic Research     │
-            │   Assistant (NLP)       │                   │   Analytics & LaTeX     │
-            │   (assistente_ia.py)    │                   │(analytics_estatistico.py)│
-            └────────────┬────────────┘                   └────────────┬────────────┘
-                         │                                             │
-                         └──────────────────────┬──────────────────────┘
-                                                │
-                         ┌──────────────────────┴──────────────────────┐
-                         │                                             │
-            ┌────────────▼────────────┐                   ┌────────────▼────────────┐
-            │   GTFS Routing Engine   │                   │  Scikit-Learn MLOps     │
-            │   (motor_rotas.py)      │                   │  (motor_ia_ml.py)       │
-            └─────────────────────────┘                   └─────────────────────────┘
+
+---
+
+## 🔌 API REST — Endpoints
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| `GET` | `/health` | Health check & status do serviço |
+| `GET` | `/api/v1/weather/current` | Clima em tempo real para BH via Open-Meteo |
+| `POST` | `/api/v1/predict/delay` | Inferência ML para delay, tempo de viagem e lotação |
+| `GET` | `/api/v1/analytics/metrics` | Scores MLOps ($R^2$, MAE, RMSE, F1) & pesos XAI |
+| `GET` | `/api/v1/analytics/hypothesis-test` | Teste $t$ de Student e análise Wilcoxon |
+| `POST` | `/api/v1/analytics/tri` | Cálculo do Transit Reliability Index ($TRI$) |
+
+---
+
+## 📂 Estrutura do Projeto
+
+```text
+bh-transit-ai/
+├── src/
+│   ├── app_mapa.py              # Dashboard Streamlit (UI principal)
+│   ├── api.py                   # FastAPI REST Backend
+│   ├── motor_rotas.py           # Motor de Rotas GTFS (44KB)
+│   ├── motor_ia_ml.py           # Pipeline ML (Random Forest, XAI)
+│   ├── analytics_estatistico.py # Testes de Hipótese & Estatística
+│   ├── servico_clima.py         # Integração Open-Meteo API
+│   ├── assistente_ia.py         # Assistente IA conversacional
+│   ├── explorar_gtfs.py         # Explorador de dados GTFS
+│   ├── modelo_transito.pkl      # Modelo treinado (9.5MB)
+│   └── modelo_lotacao.pkl       # Modelo de lotação (1.1MB)
+├── tests/
+│   └── test_pipeline.py         # Suite de Testes PyTest
+├── data/                        # Dados GTFS & processados
+├── scripts/                     # Scripts utilitários
+├── .github/workflows/           # CI/CD GitHub Actions
+├── Dockerfile                   # Imagem Docker de produção
+├── docker-compose.yml           # Orquestração Streamlit + FastAPI
+├── requirements.txt             # Dependências Python
+└── README.md                    # Esta documentação
 ```
 
 ---
 
-## 💻 Installation & Quickstart
+## 🚀 Como Executar
 
-### Prerequisites
-- Python 3.10 or higher
-- `pip` package manager
+### Pré-requisitos
+- Python 3.10+
+- Docker & Docker Compose (opcional)
 
-### Environment Setup
+### Instalação
 ```bash
-# Clone the repository
-git clone https://github.com/user/bh-transit-ai.git
+git clone https://github.com/Geovana28/bh-transit-ai.git
 cd bh-transit-ai
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-### Running Automated Test Suite (Pytest)
+### Testes Automatizados
 ```bash
 python -m pytest tests/ -v
 ```
 
-### Launching Interactive Platform
+### Docker (Recomendado)
 ```bash
-python -m streamlit run src/app_mapa.py
+docker compose up --build
 ```
-Access the application at `http://localhost:8504` in your browser.
+| Serviço | URL |
+|---------|-----|
+| **Streamlit Dashboard** | `http://localhost:8504` |
+| **FastAPI Swagger** | `http://localhost:8000/docs` |
+| **FastAPI ReDoc** | `http://localhost:8000/redoc` |
+
+### Manual
+```bash
+# Terminal 1: Backend FastAPI
+python -m uvicorn src.api:app --host 0.0.0.0 --port 8000 --reload
+
+# Terminal 2: Dashboard Streamlit
+python -m streamlit run src/app_mapa.py --server.port=8504
+```
 
 ---
 
-## 📜 How to Cite (BibTeX)
+## 🧠 Explainable AI — Feature Importance
 
-If you reference this work in your **Statement of Purpose (SOP)**, academic curriculum (**Europass CV / Lattes**), or research papers, please use the following BibTeX entry:
+| Feature | Contribuição |
+|---------|:----------:|
+| Hora do dia (rush hour) | ~45% |
+| Precipitação instantânea | ~28% |
+| Dia da semana | ~18% |
+| Distância da rota | ~9% |
+
+---
+
+## 🎓 Citação (BibTeX)
 
 ```bibtex
 @techreport{bh_transit_ai_2026,
-  author       = {BH Transit AI Research Group},
-  title        = {BH Transit AI: Spatio-Temporal and Climate Intelligence Platform for Urban Mobility},
-  institution  = {Data Science for Social Good & Spatial Analytics Lab},
-  year         = {2026},
-  type         = {Technical Report},
-  url          = {https://github.com/user/bh-transit-ai},
-  note         = {Academic Portfolio for MSc Admissions in European Universities}
+  author      = {Geovana Luiza Morais Moreira},
+  title       = {BH Transit AI: Plataforma de Inteligência Espaço-Temporal para Mobilidade Urbana},
+  year        = {2026},
+  url         = {https://github.com/Geovana28/bh-transit-ai}
 }
 ```
 
 ---
 
-## 📄 License
+## ⚖️ Licença
 
-This project is released under the [MIT License](LICENSE).
+Este projeto é licenciado sob a [Licença MIT](LICENSE).

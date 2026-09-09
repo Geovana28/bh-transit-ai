@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  # Serviço do Dashboard Interativo Streamlit
+  streamlit-dashboard:
+    build: .
+    container_name: bh_transit_streamlit
+    ports:
+      - "8504:8504"
+    volumes:
+      - ./data:/app/data
+      - ./src:/app/src
+    environment:
+      - STREAMLIT_SERVER_PORT=8504
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+    restart: unless-stopped
+    command: ["streamlit", "run", "src/app_mapa.py", "--server.port=8504", "--server.address=0.0.0.0"]
+
+  # Serviço da REST API FastAPI
+  fastapi-service:
+    build: .
+    container_name: bh_transit_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+    environment:
+      - PORT=8000
+    restart: unless-stopped
+    command: ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
