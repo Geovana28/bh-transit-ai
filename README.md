@@ -14,16 +14,23 @@
 
 ---
 
+## 💡 Motivação do Projeto & Decisões Técnicas
+
+Belo Horizonte possui uma topografia acidentada e avenidas de grande fluxo (como Antônio Carlos, Cristiano Machado e Amazonas) que sofrem impacto imediato durante tempestades sazonais. Este projeto nasceu da necessidade de quantificar como intempéries e atrasos operacionais afetam a previsibilidade da viagem de quem depende de ônibus na capital mineira.
+
+### Decisões de Engenharia:
+1. **Modelagem Baseada em GTFS Oficial:**
+   Utilizamos o feed GTFS público da BHTrans/Prefeitura de BH para construir o grafo de paradas, viagens e rotas, garantindo que os trajetos e tarifas correspondam à malha viária real.
+2. **Por que o Índice TRI (Transit Reliability Index)?**
+   Métricas tradicionais focam apenas no atraso médio. No entanto, para o usuário de transporte, a **variabilidade ($\sigma$)** é muito mais prejudicial do que um atraso constante. O índice pondera tanto a média quanto o desvio padrão e o impacto de pista molhada.
+3. **Machine Learning Explicável (XAI):**
+   Utilizamos Random Forest para classificar o risco de lotação e regressão para tempo de percurso, extraindo a importância relativa das variáveis (horário de pico, volume de chuva e extensão da linha) para auditoria transparente do modelo.
+
+---
+
 ## 📌 Resumo
 
-Redes de transporte público em regiões metropolitanas como Belo Horizonte sofrem com atrasos imprevisíveis causados por precipitação, gargalos topológicos e congestionamento em horários de pico. O **BH Transit AI** apresenta uma plataforma integrada com:
-
-- 🚍 **Motor de Rotas GTFS** — Parsing e análise de grafos de transporte público
-- 🧠 **Random Forest ML** — Regressão e classificação de atrasos com XAI (Feature Importance)
-- 🌧️ **Open-Meteo API** — Ingestão meteorológica em tempo real para BH (`-19.9167, -43.9345`)
-- 📊 **Índice TRI** — Transit Reliability Index combinando delay, variância e precipitação
-- ⚡ **FastAPI Backend** — Microsserviço RESTful com Swagger/OpenAPI
-- 🐳 **Docker** — Container de produção com `docker-compose`
+Plataforma integrada com motor de rotas sobre o GTFS da capital mineira, ingestão meteorológica em tempo real via Open-Meteo API, micro-serviço RESTful em FastAPI e interface interativa em Streamlit.
 
 ---
 
