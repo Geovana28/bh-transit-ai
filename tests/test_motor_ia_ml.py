@@ -53,12 +53,20 @@ class TestMotorIAML(unittest.TestCase):
         self.assertIn('Horário do Dia (Minutos)', importancias['regressor'])
 
     def test_avaliar_desempenho_modelos(self):
-        """Testa o cálculo MLOps de métricas R² e F1-score."""
+        """Testa o cálculo MLOps de métricas R², F1-score, comparação com Baseline e cobertura Conformal."""
         metricas = avaliar_desempenho_modelos()
         self.assertIn('regressor_r2', metricas)
         self.assertIn('classifier_f1_score', metricas)
         self.assertIn('feature_importance', metricas)
+        self.assertIn('baseline_mae', metricas)
+        self.assertIn('conformal_empirical_coverage_90', metricas)
         self.assertGreater(metricas['regressor_r2'], 0.5)
+        # Random Forest deve superar o baseline ingênuo em MAE e RMSE
+        self.assertLess(metricas['regressor_mae'], metricas['baseline_mae'])
+        self.assertLess(metricas['regressor_rmse'], metricas['baseline_rmse'])
+        # Cobertura empírica conformal em holdout finito deve estar na faixa esperada de 90% (±6%)
+        self.assertGreaterEqual(metricas['conformal_empirical_coverage_90'], 0.84)
+        self.assertLessEqual(metricas['conformal_empirical_coverage_90'], 1.0)
 
 
 if __name__ == '__main__':

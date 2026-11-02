@@ -17,7 +17,12 @@ sys.path.append(os.path.dirname(__file__))
 
 from servico_clima import obter_clima_atual_bh
 from motor_ia_ml import prever_impacto_transito_e_lotacao, avaliar_desempenho_modelos, obter_importancia_features
-from analytics_estatistico import executar_teste_hipotese_atraso, calcular_indice_confiabilidade_tri
+from analytics_estatistico import (
+    executar_teste_hipotese_atraso,
+    calcular_indice_confiabilidade_tri,
+    prever_intervalo_conforme,
+    detectar_data_drift_producao
+)
 
 app = FastAPI(
     title="🚌 BH Transit AI - REST API",
@@ -149,6 +154,18 @@ def calculate_tri_index(payload: TRIRequest):
         categoria=categoria,
         formula="TRI = alpha * D_delay + beta * sigma^1.5 + gamma * Delta_Rain"
     )
+
+
+@app.get("/api/v1/analytics/conformal-prediction", tags=["MLOps & Analytics"])
+def get_conformal_prediction(atraso_pontual_min: float = 12.0, alpha_cobertura: float = 0.10):
+    """Retorna o intervalo de predição com 90% de garantia matemática formal (Split Conformal Prediction)."""
+    return prever_intervalo_conforme(estimativa_pontual=atraso_pontual_min, alpha_cobertura=alpha_cobertura)
+
+
+@app.get("/api/v1/analytics/data-drift", tags=["MLOps & Analytics"])
+def get_data_drift_audit():
+    """Audita a estabilidade em produção via Kolmogorov-Smirnov Test e Population Stability Index (PSI)."""
+    return detectar_data_drift_producao()
 
 
 if __name__ == "__main__":

@@ -247,10 +247,32 @@ def avaliar_desempenho_modelos() -> Dict[str, Any]:
     rmse = np.sqrt(mean_squared_error(y_tr_test, preds_reg))
     f1 = f1_score(y_lot_test, preds_clf, average='weighted')
 
+    # Baseline comparison: Simple Mean / Linear Heuristic Baseline
+    baseline_preds = np.full_like(y_tr_test, np.mean(y_tr_train))
+    baseline_mae = float(mean_absolute_error(y_tr_test, baseline_preds))
+    baseline_rmse = float(np.sqrt(mean_squared_error(y_tr_test, baseline_preds)))
+
+    # Split Conformal Prediction empirical coverage at 1 - alpha = 0.90
+    # Split test into calibration (first half) and evaluation (second half)
+    mid = len(y_tr_test) // 2
+    cal_residuals = np.abs(y_tr_test.iloc[:mid].values - preds_reg[:mid])
+    n_cal = len(cal_residuals)
+    q_level = np.ceil((n_cal + 1) * 0.90) / n_cal
+    q_hat = float(np.quantile(cal_residuals, min(q_level, 1.0)))
+
+    eval_y = y_tr_test.iloc[mid:].values
+    eval_pred = preds_reg[mid:]
+    covered = (eval_y >= (eval_pred - q_hat)) & (eval_y <= (eval_pred + q_hat))
+    empirical_coverage_90 = float(np.mean(covered))
+
     return {
         "regressor_r2": float(round(r2, 4)),
         "regressor_mae": float(round(mae, 4)),
         "regressor_rmse": float(round(rmse, 4)),
+        "baseline_mae": float(round(baseline_mae, 4)),
+        "baseline_rmse": float(round(baseline_rmse, 4)),
+        "conformal_q_hat_90": float(round(q_hat, 4)),
+        "conformal_empirical_coverage_90": float(round(empirical_coverage_90, 4)),
         "classifier_f1_score": float(round(f1, 4)),
         "test_samples": len(X_test),
         "feature_importance": obter_importancia_features()

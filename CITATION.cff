@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use BH Transit AI in your research or applications, please cite it as below."
+authors:
+  - family-names: Silva
+    given-names: Geovana
+    orcid: "https://orcid.org/0009-0000-0000-0000"
+title: "BH Transit AI: Spatio-Temporal and Environmental Intelligence for Urban Bus Networks in Belo Horizonte"
+version: 1.0.0
+date-released: 2026-11-01
+url: "https://github.com/Geovana28/bh-transit-ai"
+repository-code: "https://github.com/Geovana28/bh-transit-ai"
+keywords:
+  - "urban mobility"
+  - "gtfs"
+  - "machine learning"
+  - "explainable ai"
+  - "spatio-temporal analysis"
+  - "weather impact"
+license: MIT
+

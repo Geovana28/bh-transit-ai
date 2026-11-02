@@ -1,13 +1,12 @@
 # 🚌 BH Transit AI — Inteligência Espaço-Temporal & Ambiental para Mobilidade Urbana
 
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.2%2B-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
-[![PyTest](https://img.shields.io/badge/Tests-Pytest-brightgreen?logo=pytest&logoColor=white)](https://docs.pytest.org/)
-[![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)](https://github.com/Geovana28/bh-transit-ai/actions)
-[![Licença MIT](https://img.shields.io/badge/Licença-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Live Interactive Showcase](https://img.shields.io/badge/Live_Showcase-GitHub_Pages-f59e0b?style=for-the-badge&logo=googlechrome&logoColor=white)](https://geovana28.github.io/bh-transit-ai/)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Licença MIT](https://img.shields.io/badge/Licença-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+
+> 💡 **Experimente a Demonstração Interativa:** Acesse o [**Interactive Showcase (GitHub Pages)**](https://geovana28.github.io/bh-transit-ai/) para simular em tempo real o atraso e risco de lotação sob intempéries meteorológicas sem precisar instalar dependências locais.
 
 > **Plataforma end-to-end de inteligência espaço-temporal para mobilidade urbana em Belo Horizonte.**
 > Integra GTFS, Machine Learning, Explainable AI, meteorologia em tempo real e API RESTful.
@@ -51,6 +50,18 @@ $$d = 2R \arcsin\left(\sqrt{\sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_
 ### Transit Reliability Index (TRI)
 
 $$TRI = \alpha \cdot \bar{D}_{\text{delay}} + \beta \cdot \sigma_{\text{delay}}^{1.5} + \gamma \cdot \Delta_{\text{Rain}}$$
+
+### Conformal Prediction com Garantia Estatística Formal (Split Conformal)
+
+$$\mathbb{P}\left( Y_{\text{novo}} \in \left[ \hat{y} - \hat{q}, \, \hat{y} + \hat{q} \right] \right) \ge 1 - \alpha$$
+
+Onde $\hat{q}$ é o quantil empírico corrigido para amostras finitas dos resíduos não-conformes: $\hat{q} = \text{Quantil}\left( \frac{\lceil (n+1)(1-\alpha) \rceil}{n} \right)$. Gera intervalos com **90% de cobertura estatística estrita**, sem assumir normalidade.
+
+### Monitor de Data Drift em Produção (Population Stability Index - PSI & KS-Test)
+
+$$\text{PSI} = \sum_{i=1}^{K} \left( \% \text{Produção}_i - \% \text{Referência}_i \right) \cdot \ln\left( \frac{\% \text{Produção}_i}{\% \text{Referência}_i} \right)$$
+
+Audita shifts de distribuição durante temporais ou feriados, alertando a necessidade de retreino ($PSI \ge 0.25$).
 
 ### Correlação Cruzada Espaço-Temporal
 
@@ -172,6 +183,20 @@ python -m streamlit run src/app_mapa.py --server.port=8504
 | Precipitação instantânea | ~28% |
 | Dia da semana | ~18% |
 | Distância da rota | ~9% |
+
+---
+
+## ⚠️ Transparência Metodológica: Dados Reais vs. Simulados e Limitações
+
+Para garantir rigor científico e reprodutibilidade, este repositório distingue explicitamente a natureza de cada fonte de dados:
+
+1. **Dados Reais Observados**:
+   * **Malha Viária e Programação Horária (`data/gtfs_bh_*.zip`)**: Dados estáticos oficiais do feed GTFS público da BHTrans/Prefeitura de Belo Horizonte (coordenadas geográficas das paradas, extensão das linhas e tabela horária planejada).
+   * **Meteorologia em Tempo Real (`src/servico_clima.py`)**: Precipitação pluviométrica ($\text{mm/h}$), temperatura, velocidade do vento e código WMO coletados ao vivo da API pública **Open-Meteo** para as coordenadas de Belo Horizonte ($\text{Lat: } -19.9167, \text{Lon: } -43.9345$).
+2. **Dados Simulados e Derivados (`src/motor_ia_ml.py`)**:
+   * Como o feed GTFS público da BHTrans disponibilizado neste repositório é estático (não inclui stream GTFS-Realtime de GPS segundo a segundo de cada veículo nem sensores ópticos de catraca), os **fatores de atraso operacional (`fator_transito`) e níveis de ocupação (`lotacao`)** são gerados por uma função de simulação estocástica calibrada (`gerar_dados_treinamento_sinteticos_bh` com `np.random.seed(42)`).
+   * O modelo `RandomForest` é avaliado contra um Baseline ingênuo e auditado via *Split Conformal Prediction* sobre uma partição de calibração/teste disjunta, verificando-se empiricamente a cobertura de $\ge 85\text{--}90\%$ nos testes automatizados (`tests/test_motor_ia_ml.py`).
+3. **Limitações**: As inferências de atraso refletem o regime paramétrico da simulação calibrada pelos corredores de BH e não substituem telemetria AVL (*Automatic Vehicle Location*) em tempo real da frota municipal.
 
 ---
 
