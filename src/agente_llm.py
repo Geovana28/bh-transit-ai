@@ -66,6 +66,54 @@ def _load_gemini_key() -> Optional[str]:
     return None
 
 
+def _call_gemini_tool_router(user_query: str, api_key: str) -> Optional[Dict[str, Any]]:
+    """
+    Chama a API Gemini com Function Calling / Structured JSON Schema para selecionar a ferramenta
+    e extrair os parâmetros da consulta do usuário.
+    """
+    prompt = (
+        "Você é o roteador de ferramentas (Tool Calling Router) do sistema BH Transit AI de Belo Horizonte.\n"
+        "Analise a pergunta do usuário e retorne APENAS um objeto JSON válido (sem markdown) no formato:\n"
+        '{"selected_tool": "<nome_da_ferramenta>", "arguments": {...}}\n\n'
+        "Ferramentas disponíveis:\n"
+        '1. "predict_eta_and_crowding": para perguntas sobre atraso de ônibus, horário de pico, trânsito, chuva na rota ou lotação em BH. '
+        'Argumentos: {"horario_str": "HH:MM", "tipo_dia_str": "Dia Útil"|"Sábado"|"Domingo", "tempo_viagem_teorico_min": 32.0, "precipitacao_mm": float}.\n'
+        '2. "get_realtime_weather_bh": para perguntas apenas sobre clima/temperatura/chuva atual em BH sem cálculo de rota. Argumentos: {}.\n'
+        '3. "compute_route_reliability_tri": para perguntas sobre índice TRI ou confiabilidade operacional da linha. '
+        'Argumentos: {"tempo_medio_viagem_min": 35.0, "desvio_padrao_min": 7.5, "fator_chuva": float}.\n'
+        '4. "out_of_scope_guardrail": OBRIGATÓRIO para qualquer pergunta fora de trânsito/transporte/clima em BH (ex: receitas, futebol, finanças, piadas). '
+        'Argumentos: {"reason": "Fora do escopo de mobilidade urbana de BH"}.\n\n'
+        f"PERGUNTA DO USUÁRIO: {user_query}\nJSON:"
+    )
+    body = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "temperature": 0.0,
+            "maxOutputTokens": 512,
+            "responseMimeType": "application/json",
+        },
+    }
+    data_bytes = json.dumps(body).encode("utf-8")
+    for m in ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash", "gemini-3.5-flash", "gemini-2.5-flash-lite"]:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent?key={api_key}"
+        req = urllib.request.Request(url, data=data_bytes, headers={"Content-Type": "application/json"}, method="POST")
+        try:
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                raw = json.loads(resp.read().decode("utf-8"))
+            parts = raw.get("candidates", [{}])[0].get("content", {}).get("parts", [])
+            text_chunks = [p.get("text", "") for p in parts if not p.get("thought", False)]
+            txt = "\n".join(t.strip() for t in text_chunks if t.strip())
+            if not txt and parts:
+                txt = parts[-1].get("text", "").strip()
+            parsed = json.loads(txt)
+            if "selected_tool" in parsed and "arguments" in parsed:
+                parsed["mode"] = f"gemini-api ({m})"
+                return parsed
+        except Exception:
+            continue
+    return None
+
+
 def route_intent_and_select_tool(user_query: str, use_llm: bool = True) -> Dict[str, Any]:
     """
     Seleciona a ferramenta adequada e extrai os argumentos estruturados a partir da pergunta do usuário.
@@ -86,6 +134,14 @@ def route_intent_and_select_tool(user_query: str, use_llm: bool = True) -> Dict[
         res = dict(cache[q_hash])
         res["from_cache"] = True
         return res
+
+    api_key = _load_gemini_key() if use_llm else None
+    if api_key:
+        llm_decision = _call_gemini_tool_router(user_query, api_key)
+        if llm_decision is not None:
+            cache[q_hash] = llm_decision
+            cache_path.write_text(json.dumps(cache, indent=2, ensure_ascii=False), encoding="utf-8")
+            return llm_decision
 
     q_lower = user_query.lower()
 
