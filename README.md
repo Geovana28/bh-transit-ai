@@ -65,6 +65,10 @@ $$\text{PSI} = \sum_{i=1}^{K} \left( \% \text{Produção}_i - \% \text{Referênc
 
 Audita shifts de distribuição durante temporais ou feriados, alertando a necessidade de retreino ($PSI \ge 0.25$).
 
+### Agente de IA com Tool Calling e Guardrails (`src/agente_llm.py`)
+
+O módulo `src/agente_llm.py` (exposto em `POST /api/v1/agent/ask`) implementa roteamento estruturado de ferramentas (*Function / Tool Calling*) com 4 ferramentas declaradas (`predict_eta_and_crowding`, `get_realtime_weather_bh`, `compute_route_reliability_tri` e `out_of_scope_guardrail`), garantindo que o assistente acione os motores matemáticos reais para perguntas de mobilidade em BH e recuse perguntas fora de escopo sem alucinar horários.
+
 ### Correlação Cruzada Espaço-Temporal
 
 $$r_{X,Y}(\tau) = \frac{\sum_{t=1}^{N-\tau} (X_t - \bar{X})(Y_{t+\tau} - \bar{Y})}{\sqrt{\sum (X_t - \bar{X})^2 \sum (Y_t - \bar{Y})^2}}$$

@@ -23,6 +23,7 @@ from analytics_estatistico import (
     prever_intervalo_conforme,
     detectar_data_drift_producao
 )
+from agente_llm import execute_agent_query
 
 app = FastAPI(
     title="🚌 BH Transit AI - REST API",
@@ -79,6 +80,10 @@ class TRIResponse(BaseModel):
     tri_valor: float
     categoria: str
     formula: str
+
+
+class AgentQueryRequest(BaseModel):
+    query: str = Field(..., description="Pergunta em linguagem natural para o Agente de Mobilidade Urbana com Tool Calling")
 
 
 # --- ROTAS DA API ---
@@ -166,6 +171,12 @@ def get_conformal_prediction(atraso_pontual_min: float = 12.0, alpha_cobertura: 
 def get_data_drift_audit():
     """Audita a estabilidade em produção via Kolmogorov-Smirnov Test e Population Stability Index (PSI)."""
     return detectar_data_drift_producao()
+
+
+@app.post("/api/v1/agent/ask", tags=["LLM Agent & Tool Calling"])
+def ask_mobility_agent(payload: AgentQueryRequest):
+    """Executa o Agente de IA com seleção de ferramentas (Tool Calling) e guardrails anti-alucinação."""
+    return execute_agent_query(payload.query)
 
 
 if __name__ == "__main__":

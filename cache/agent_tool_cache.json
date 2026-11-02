@@ -1,0 +1,47 @@
+{
+  "beb01c8ffc05c2706c52": {
+    "selected_tool": "out_of_scope_guardrail",
+    "arguments": {
+      "reason": "Pergunta fora do escopo de mobilidade urbana e trânsito de Belo Horizonte."
+    },
+    "mode": "guardrail"
+  },
+  "12b722d28255a7b62c58": {
+    "selected_tool": "out_of_scope_guardrail",
+    "arguments": {
+      "reason": "Pergunta fora do escopo de mobilidade urbana e trânsito de Belo Horizonte."
+    },
+    "mode": "guardrail"
+  },
+  "22ec0dd3cf2be128d01e": {
+    "selected_tool": "out_of_scope_guardrail",
+    "arguments": {
+      "reason": "Pergunta fora do escopo de mobilidade urbana e trânsito de Belo Horizonte."
+    },
+    "mode": "guardrail"
+  },
+  "70de5b15bfedd015384b": {
+    "selected_tool": "predict_eta_and_crowding",
+    "arguments": {
+      "horario_str": "18:00",
+      "tipo_dia_str": "Dia Útil",
+      "tempo_viagem_teorico_min": 32.0,
+      "precipitacao_mm": 12.0
+    },
+    "mode": "structured-router"
+  },
+  "958561d9d585a489149c": {
+    "selected_tool": "compute_route_reliability_tri",
+    "arguments": {
+      "tempo_medio_viagem_min": 35.0,
+      "desvio_padrao_min": 7.5,
+      "fator_chuva": 1.25
+    },
+    "mode": "structured-router"
+  },
+  "bbd2c27c56327fec51ee": {
+    "selected_tool": "get_realtime_weather_bh",
+    "arguments": {},
+    "mode": "structured-router"
+  }
+}
