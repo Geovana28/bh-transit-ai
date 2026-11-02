@@ -51,7 +51,9 @@ $$d = 2R \arcsin\left(\sqrt{\sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_
 
 $$TRI = \alpha \cdot \bar{D}_{\text{delay}} + \beta \cdot \sigma_{\text{delay}}^{1.5} + \gamma \cdot \Delta_{\text{Rain}}$$
 
-### Conformal Prediction com Garantia Estatística Formal (Split Conformal)
+### Conformal Prediction (Split Conformal)
+
+> **Resultado medido:** a garantia teórica de cobertura (≥ 90%) é *marginal* e vale sob a hipótese de **permutabilidade** (dados i.i.d.). No holdout atual (250 pontos de calibração / 250 de avaliação, dados sintéticos), a cobertura empírica medida foi de **≈ 84,8%**, um pouco abaixo do nominal. Isso é compatível com a variância de amostra finita e com o fato de os resíduos de calibração virem do mesmo split de teste. Uma estimativa mais robusta exigiria repetir o experimento com várias seeds e relatar a média ± desvio-padrão.
 
 $$\mathbb{P}\left( Y_{\text{novo}} \in \left[ \hat{y} - \hat{q}, \, \hat{y} + \hat{q} \right] \right) \ge 1 - \alpha$$
 
