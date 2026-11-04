@@ -6,10 +6,19 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Licença MIT](https://img.shields.io/badge/Licença-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
+> **🇧🇷 Idioma**: Português (Brasil) | **🇺🇸 [English Executive Summary](#-english-executive-summary)**
+>
 > 💡 **Experimente a Demonstração Interativa:** Acesse o [**Interactive Showcase (GitHub Pages)**](https://geovana28.github.io/bh-transit-ai/) para simular em tempo real o atraso e risco de lotação sob intempéries meteorológicas sem precisar instalar dependências locais.
-
+>
 > **Plataforma end-to-end de inteligência espaço-temporal para mobilidade urbana em Belo Horizonte.**
 > Integra GTFS, Machine Learning, Explainable AI, meteorologia em tempo real e API RESTful.
+
+---
+
+### 🌐 English Executive Summary
+**BH Transit AI** is a production-grade urban mobility & spatial data engineering platform for Belo Horizonte (MG, Brazil), developed by **Geovana Luiza Morais Moreira**. It combines official public GTFS transit feeds, real-time weather ingestion (Open-Meteo API), and machine learning to forecast public transit delays, crowding risk, and travel reliability (Transit Reliability Index - TRI). Features LLM Agent tool-calling architecture (Gemini API + FastAPI), split conformal prediction for statistically rigorous confidence intervals, population stability index (PSI) drift monitoring, and an interactive web demo.
+
+---
 
 ---
 
