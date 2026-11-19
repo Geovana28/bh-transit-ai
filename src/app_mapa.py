@@ -508,12 +508,34 @@ def obter_linhas_do_ponto(stop_id, stop_times_df, trips_df, routes_df):
         return []
 
 
+def criar_mapa_dark(location, zoom_start=13):
+    """Cria mapa Folium dark sem API key usando Esri World Dark Gray Canvas + Reference."""
+    mapa = folium.Map(location=location, zoom_start=zoom_start, tiles=None)
+    folium.TileLayer(
+        tiles="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+        attr="Tiles &copy; Esri — World Dark Gray Canvas",
+        name="Dark Gray Canvas",
+        max_zoom=19,
+        max_native_zoom=16,
+    ).add_to(mapa)
+    folium.TileLayer(
+        tiles="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
+        attr="Esri Reference",
+        name="Rótulos",
+        overlay=True,
+        control=False,
+        max_zoom=19,
+        max_native_zoom=16,
+    ).add_to(mapa)
+    return mapa
+
+
 def renderizar_mapa_rota(melhor_rota, o_lat, o_lon, d_lat, d_lon, key_prefix, stops_df=None, trips_df=None, stop_times_df=None, routes_df=None):
-    """Desenha o mapa da rota em CartoDB dark_matter acompanhando as ruas reais de BH (shapes.txt)."""
+    """Desenha o mapa da rota em tema dark (Esri Dark Gray Canvas, sem API key) acompanhando as ruas reais de BH."""
     centro_mapa_lat = (o_lat + d_lat) / 2.0
     centro_mapa_lon = (o_lon + d_lon) / 2.0
 
-    mapa = folium.Map(location=[centro_mapa_lat, centro_mapa_lon], zoom_start=13, tiles="CartoDB dark_matter")
+    mapa = criar_mapa_dark(location=[centro_mapa_lat, centro_mapa_lon], zoom_start=13)
 
     # Marcador da Origem
     folium.CircleMarker(
@@ -969,7 +991,7 @@ with tab3:
     sample_stops = stops_validos.sample(n=min(amostra_qtd, len(stops_validos)), random_state=42)
     heatmap_data = [[float(row["stop_lat"]), float(row["stop_lon"]), 1.0] for _, row in sample_stops.iterrows()]
 
-    mapa_heat = folium.Map(location=[-19.9167, -43.9345], zoom_start=12, tiles="CartoDB dark_matter")
+    mapa_heat = criar_mapa_dark(location=[-19.9167, -43.9345], zoom_start=12)
 
     plugins.HeatMap(
         heatmap_data,
@@ -1176,7 +1198,7 @@ with tab5:
         lon_mapa = -43.9345
         zoom_mapa = 13
 
-    mapa_unificado = folium.Map(location=[lat_mapa, lon_mapa], zoom_start=zoom_mapa, tiles="CartoDB dark_matter")
+    mapa_unificado = criar_mapa_dark(location=[lat_mapa, lon_mapa], zoom_start=zoom_mapa)
 
     if st.session_state["clique_orig_lat"]:
         folium.CircleMarker(
