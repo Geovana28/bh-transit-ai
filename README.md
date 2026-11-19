@@ -1,6 +1,7 @@
 # 🚌 BH Transit AI — Inteligência Espaço-Temporal & Ambiental para Mobilidade Urbana
 
-[![Live Interactive Showcase](https://img.shields.io/badge/Live_Showcase-GitHub_Pages-f59e0b?style=for-the-badge&logo=googlechrome&logoColor=white)](https://geovana28.github.io/bh-transit-ai/)
+[![Live App - Streamlit Cloud](https://img.shields.io/badge/Live_App-Streamlit_Cloud-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://bh-transit-ai.streamlit.app/)
+[![Live Interactive Showcase](https://img.shields.io/badge/Web_Overview-GitHub_Pages-f59e0b?style=for-the-badge&logo=googlechrome&logoColor=white)](https://geovana28.github.io/bh-transit-ai/)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
@@ -8,7 +9,7 @@
 
 > **🇧🇷 Idioma**: Português (Brasil) | **🇺🇸 [English Executive Summary](#-english-executive-summary)**
 >
-> 💡 **Experimente a Demonstração Interativa:** Acesse o [**Interactive Showcase (GitHub Pages)**](https://geovana28.github.io/bh-transit-ai/) para simular em tempo real o atraso e risco de lotação sob intempéries meteorológicas sem precisar instalar dependências locais.
+> 🚀 **Experimente o App Completo em Produção (Python + ML + GTFS Oficial):** Acesse o [**BH Transit AI no Streamlit Cloud**](https://bh-transit-ai.streamlit.app/) (ou a [versão web resumida](https://geovana28.github.io/bh-transit-ai/)) para traçar rotas reais em Belo Horizonte, calcular transbordos, consultar o clima Open-Meteo e rodar inferência de atraso e lotação em tempo real.
 >
 > **Plataforma end-to-end de inteligência espaço-temporal para mobilidade urbana em Belo Horizonte.**
 > Integra GTFS, Machine Learning, Explainable AI, meteorologia em tempo real e API RESTful.
